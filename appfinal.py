@@ -16,20 +16,18 @@ def fetch_gold(interval="1m", limit=500):
 
     raw = r.json()
 
+    # نسخه جدید سرور: ساختار ساده و بدون chart/result
     try:
-        timestamps = raw["chart"]["result"][0]["timestamp"]
-        indicators = raw["chart"]["result"][0]["indicators"]["quote"][0]
+        df = pd.DataFrame({
+            "time": pd.to_datetime(raw["timestamp"], unit="s"),
+            "open": raw["open"],
+            "high": raw["high"],
+            "low": raw["low"],
+            "close": raw["close"]
+        })
     except:
         st.error("Invalid data format from Relay Server")
         return None
-
-    df = pd.DataFrame({
-        "time": pd.to_datetime(timestamps, unit="s"),
-        "open": indicators["open"],
-        "high": indicators["high"],
-        "low": indicators["low"],
-        "close": indicators["close"]
-    })
 
     df = df.dropna().tail(limit)
     return df
