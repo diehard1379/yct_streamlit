@@ -1,0 +1,3 @@
+[server]
+proxyEnabled = true
+proxyAddress = "https://api-proxy.streamlit.app"
